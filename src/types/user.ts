@@ -1,8 +1,8 @@
-import { User as PrismaUser, UserRole } from '@prisma/client';
+import { User as PrismaUser, UserRole as PrismaUserRole } from '@prisma/client';
 
 export type User = PrismaUser;
 
-export type UserRole = UserRole;
+export type UserRole = PrismaUserRole;
 
 export interface TelegramUserData {
   id: number;

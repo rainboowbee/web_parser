@@ -107,7 +107,7 @@ export function UsersList() {
               </div>
             }
           >
-            <Title level="4">
+            <Title level="3">
               {user.firstName} {user.lastName}
             </Title>
           </Cell>

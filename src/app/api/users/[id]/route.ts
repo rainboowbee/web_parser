@@ -3,19 +3,20 @@ import { UserService } from '@/services/userService';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
-    const id = parseInt(params.id);
+    const userId = parseInt(id);
     
-    if (isNaN(id)) {
+    if (isNaN(userId)) {
       return NextResponse.json(
         { error: 'Invalid user ID' },
         { status: 400 }
       );
     }
 
-    const user = await UserService.findById(id);
+    const user = await UserService.findById(userId);
 
     if (!user) {
       return NextResponse.json(
@@ -36,12 +37,13 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
-    const id = parseInt(params.id);
+    const userId = parseInt(id);
     
-    if (isNaN(id)) {
+    if (isNaN(userId)) {
       return NextResponse.json(
         { error: 'Invalid user ID' },
         { status: 400 }
@@ -58,7 +60,7 @@ export async function PATCH(
       );
     }
 
-    const user = await UserService.updateRole(id, role);
+    const user = await UserService.updateRole(userId, role);
 
     return NextResponse.json(user);
   } catch (error) {
