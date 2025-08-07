@@ -6,34 +6,18 @@ import { useTranslations } from 'next-intl';
 import { Link } from '@/components/Link/Link';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher/LocaleSwitcher';
 import { Page } from '@/components/Page';
-
-import tonSvg from './_assets/ton.svg';
+import { UserHeader } from '@/components/UserHeader/UserHeader';
+import { useUser } from '@/hooks/useUser';
 
 export default function Home() {
   const t = useTranslations('i18n');
+  const { user } = useUser();
 
   return (
     <Page back={false}>
       <List>
-        <Section
-          header="Features"
-          footer="You can use these pages to learn more about features, provided by Telegram Mini Apps and other useful projects"
-        >
-          <Link href="/ton-connect">
-            <Cell
-              before={
-                <Image
-                  src={tonSvg.src}
-                  style={{ backgroundColor: '#007AFF' }}
-                  alt="TON Logo"
-                />
-              }
-              subtitle="Connect your TON wallet"
-            >
-              TON Connect
-            </Cell>
-          </Link>
-        </Section>
+        <UserHeader />
+        <Section header="Navigation" />
         <Section
           header="Application Launch Data"
           footer="These pages help developer to learn more about current launch information"
@@ -54,6 +38,28 @@ export default function Home() {
             </Cell>
           </Link>
         </Section>
+        <Section
+          header="Account"
+          footer="Account management and settings"
+        >
+          <Link href="/profile">
+            <Cell subtitle="View detailed profile information">
+              Profile Details
+            </Cell>
+          </Link>
+        </Section>
+        {user?.role === 'ADMIN' && (
+          <Section
+            header="Admin Panel"
+            footer="Administrative functions (Admin only)"
+          >
+            <Link href="/admin/users">
+              <Cell subtitle="Manage all users">
+                Users Management
+              </Cell>
+            </Link>
+          </Section>
+        )}
         <Section header={t('header')} footer={t('footer')}>
           <LocaleSwitcher />
         </Section>

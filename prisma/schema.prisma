@@ -1,0 +1,51 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+model User {
+  id                    Int      @id @default(autoincrement())
+  telegramId            BigInt   @unique // Telegram user ID
+  firstName             String?  // first_name from Telegram
+  lastName              String?  // last_name from Telegram
+  username              String?  @unique // username from Telegram
+  languageCode          String?  // language_code from Telegram
+  isPremium             Boolean  @default(false) // is_premium from Telegram
+  addedToAttachmentMenu Boolean  @default(false) // added_to_attachment_menu from Telegram
+  allowsWriteToPm       Boolean  @default(false) // allows_write_to_pm from Telegram
+  photoUrl              String?  // photo_url from Telegram
+  
+  // Application specific fields
+  role                  UserRole @default(USER)
+  isActive              Boolean  @default(true)
+  lastSeen              DateTime @default(now())
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  
+  // Relations
+  sessions              Session[]
+  
+  @@map("users")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  
+  @@map("sessions")
+}
